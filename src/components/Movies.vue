@@ -7,6 +7,9 @@
 			<button type="submit">Search for Movies</button>
 		</form>
 		<h3>{{searchTerm}}</h3>
+		<ul>
+			<li v-for="movie of movies" :key="movie.Title">{{ movie.Title }}</li>
+		</ul>
 	</div>	
 </template>
 
@@ -14,12 +17,19 @@
 export default {
   data() {
 	  return {
-		  searchTerm: ''
+		  searchTerm: '',
+		  movies: []
 	  }
   },
   methods: {
 	  searchForMovies(){
-		  console.log(this.searchTerm)
+		  const API_URL = `https://omdb-api.now.sh/?s=${this.searchTerm}`
+		  fetch(API_URL)
+		  	.then(response => response.json())
+			.then(response => {
+				this.movies = response.Search
+				console.log(this.movies)
+			})
 	  }
   }
 }
